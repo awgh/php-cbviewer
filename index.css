@@ -1,0 +1,47 @@
+* {
+	white-space:nowrap;
+	font-family: Helvetica,"Bitstream Vera Sans",Arial,sans-serif;
+	font-size: small;
+	text-decoration: none;
+}
+
+a[href$='.cbr'],a[href$='.CBR'] {
+	color:green;
+	background:transparent url(cbr.png) center left no-repeat;
+	display:inline-block;
+	padding-left:30px;
+	line-height:24px;
+}
+
+a[href$='.cbz'],a[href$='.CBZ'] {
+	color: orange;
+	background:transparent url(cbz.png) center left no-repeat;
+	display:inline-block;
+	padding-left:30px;
+	line-height:24px;
+}
+
+a.dir {
+	color: blue;
+	background:transparent url(folder.png) center left no-repeat;
+	display:inline-block;
+	padding-left:30px;
+	line-height:24px;
+}
+
+a.prev {
+	color: blue;
+	background:transparent url(up.png) center left no-repeat;
+	display:inline-block;
+	padding-left:30px;
+	line-height:24px;
+}
+
+p {
+	color: blue;
+}
+
+h2 {
+	font-size: large;
+	margin-bottom:0;
+}
