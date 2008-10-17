@@ -1,6 +1,6 @@
 <?php
 $base = "/opt/Comics";
 $webcache = 'cache';
-$cachepath = '/var/www/virtualhosts/cbviewer.devlogic.org/' . $webcache;
+$cachepath = pathinfo(realpath("config.php"),PATHINFO_DIRNAME) . "/" . $webcache;
 
 ?>
