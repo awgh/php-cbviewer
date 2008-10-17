@@ -7,14 +7,11 @@
 <?php
 include('config.php');
 
-//$base = "/opt/Comics";
-
 if ($_GET['path']) {
-	if (preg_match('/^\/opt\/Comics/',$_GET['path']))
+	if (preg_match(":$base:",$_GET['path']))
 	{
 		$path = stripslashes($_GET['path']);
 	} else { 
-//		die("Flagrant Security Error!"); 
 		$path = $base;
 	}
 } else {
@@ -23,9 +20,8 @@ if ($_GET['path']) {
 
 if (preg_match('/[.][.]/',$path)) {
 	$path = preg_replace('#/[^/]*/[.][.]#','',$path);
-	if (preg_match('#^/opt/Comics#',$path)) { }
+	if (preg_match("#^$base#",$path)) { }
 	else { 
-//		die("Flagrant Security Error!"); 
 		$path = $base;
 	}
 }
