@@ -50,7 +50,7 @@ foreach($files as $file) {
 	} elseif (preg_match('/^._/',$file)) {
 		continue;
       } else {
-	if ((preg_match('/[.]cb[rz]$/i',$file))||(preg_match('/[.]zip$/i',$file))) {
+	if ((preg_match('/[.]cb[rz]$/i',$file))||(preg_match('/[.]zip$/i',$file))||(preg_match('/[.]rar$/i',$file))) {
               echo "<a href='splitscreen.php?filename=".rawurlencode($path)."/".rawurlencode($file)."' class='cbr'>$file</a><br />\n";
 //	} elseif (preg_match('/[.]cbz$/i',$file)) {
 //		echo "<a href='splitzip.php?filename=".rawurlencode($path)."/".rawurlencode($file)."' class='cbz'>$file</a><br />\n";

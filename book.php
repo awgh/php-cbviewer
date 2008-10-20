@@ -16,7 +16,7 @@ if ($_GET['filename'] <> '') {
 	die("Error: no book selected!");
 }
 
-if (preg_match('/cbr$/i',$filename)) {
+if ((preg_match('/cbr$/i',$filename)) || (preg_match('/rar$/i',$filename))) {
 	$rar_file = rar_open($filepath.$filename) or die ("Failed to open Rar archive");
 	$list = rar_list($rar_file);
 	sort($list);

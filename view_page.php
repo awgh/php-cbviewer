@@ -29,7 +29,7 @@ $comicname = urldecode(stripslashes($_GET['comic']));
 
 $faketmp = date('U');
 
-if (preg_match('/cbr$/i',$comicname)) {
+if ((preg_match('/cbr$/i',$comicname))||(preg_match('/rar$/i',$comicname))) {
 	$filename = urldecode(stripslashes($_GET['page']));
 	$rar_file = rar_open($comicname);
 	$entry = rar_entry_get($rar_file,$filename);
