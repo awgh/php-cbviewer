@@ -26,7 +26,7 @@ if ((preg_match('/cbr$/i',$filename)) || (preg_match('/rar$/i',$filename))) {
 			$filelist[] = $file->name;
 		}
 	};
-	natsort($filelist);
+	natcasesort($filelist);
 	foreach ($filelist as $file) {
 		print "<a href='view_page.php?page=".rawurlencode($file) ."&comic=".urlencode($filename)."' target='viewer' class='book'>".basename($file)."</a><br />\n";
 	}
