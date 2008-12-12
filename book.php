@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 ?>
 <?php
 ?>
@@ -19,11 +20,15 @@ if ($_GET['filename'] <> '') {
 if ((preg_match('/cbr$/i',$filename)) || (preg_match('/rar$/i',$filename))) {
 	$rar_file = rar_open($filepath.$filename) or die ("Failed to open Rar archive");
 	$list = rar_list($rar_file);
-	sort($list);
+	$filelist = array();
 	foreach ($list as $file) {
 		if (($file->unpacked_size > 0) && preg_match('/jpg|gif|png/i',$file->name)) {
-			print "<a href='view_page.php?page=".rawurlencode($file->name) ."&comic=".urlencode($filename)."' target='viewer' class='book'>".basename($file->name)."</a><br />\n";
-		};
+			$filelist[] = $file->name;
+		}
+	};
+	natsort($filelist);
+	foreach ($filelist as $file) {
+		print "<a href='view_page.php?page=".rawurlencode($file) ."&comic=".urlencode($filename)."' target='viewer' class='book'>".basename($file)."</a><br />\n";
 	}
 } elseif ((preg_match('/cbz$/i',$filename))||(preg_match('/zip$/i',$filename))) {
 	$zip = new ZipArchive();
