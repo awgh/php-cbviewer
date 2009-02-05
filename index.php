@@ -52,8 +52,8 @@ foreach($files as $file) {
       } else {
 	if ((preg_match('/[.]cb[rz]$/i',$file))||(preg_match('/[.]zip$/i',$file))||(preg_match('/[.]rar$/i',$file))) {
               echo "<a href='splitscreen.php?filename=".rawurlencode($path)."/".rawurlencode($file)."' class='cbr'>$file</a><br />\n";
-//	} elseif (preg_match('/[.]cbz$/i',$file)) {
-//		echo "<a href='splitzip.php?filename=".rawurlencode($path)."/".rawurlencode($file)."' class='cbz'>$file</a><br />\n";
+	} elseif ((preg_match('/txt$/i',$file))||(preg_match('/htm(l?)$/i',$file))) {
+	      echo "<a href='view_page.php?page=".rawurlencode($path)."/".rawurlencode($file)."' class='file'>$file</a><br />\n";
 	} else {
 		echo "$file<br />\n";
 	}

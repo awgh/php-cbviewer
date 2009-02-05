@@ -1,3 +1,5 @@
+2/4/2009: don't keep images on the disk for so long.  extract, display, and unlink in the same pageload.  imager.php and view_image.php are good for images that had to be extacted to disk (i.e., from RAR archives); ZipArchive::getStream and the GD function imagecreatefromstring may do the trick for ZIP archives; if not, imager and view_image will also work for zips.
+
 1) get a list of files/directories
 2) each one is clickable.  if a directory, descend the tree and re-list
 	if a file, "view" file

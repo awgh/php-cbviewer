@@ -25,7 +25,10 @@ function SureRemoveDir($dir, $DeleteMe) {
 
 SureRemoveDir($cachepath,false);
 
-$comicname = urldecode(stripslashes($_GET['comic']));
+if ($_GET['comic']) {$comicname = urldecode(stripslashes($_GET['comic']));}
+else {
+	$comicname = $_GET['page'];
+};
 
 $faketmp = date('U');
 
@@ -48,6 +51,11 @@ if ((preg_match('/cbr$/i',$comicname))||(preg_match('/rar$/i',$comicname))) {
 		echo 'failed to extract page from zip.';
 	}
 	
+} elseif (preg_match('/txt$/i',$comicname)){
+	$index = $_GET['index'];
+	echo "<PRE>";
+	readfile($comicname);
+	echo "</PRE>";
 }
 
 ?></body>
