@@ -1,28 +1,42 @@
 <?php
+include_once('password.php');
 ?>
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="index.css" />
+<link rel="stylesheet" type="text/css" href="css/main.css" />
+<link rel="stylesheet" type="text/css" href="css/index.css" />
+<title>PHP CBViewer - <?php
+if ($_GET['path']) {
+        if (preg_match(":$options[base]:",$_GET['path']))
+        {
+                $path = stripslashes($_GET['path']);
+        } else {
+                $path = $options['base'];
+        }
+} else {
+        $path = $options['base'];
+};
+echo preg_replace('#'.$options['base'].'(/?)#','/',$path);
+?></title>
 </head><body>
 <?php
-include('config.php');
 
 if ($_GET['path']) {
-	if (preg_match(":$base:",$_GET['path']))
+	if (preg_match(":$options[base]:",$_GET['path']))
 	{
 		$path = stripslashes($_GET['path']);
 	} else { 
-		$path = $base;
+		$path = $options['base'];
 	}
 } else {
-	$path = $base;
+	$path = $options['base'];
 };
 
 if (preg_match('/[.][.]/',$path)) {
 	$path = preg_replace('#/[^/]*/[.][.]#','',$path);
-	if (preg_match("#^$base#",$path)) { }
+	if (preg_match("#^$options[base]#",$path)) { }
 	else { 
-		$path = $base;
+		$path = $options['base'];
 	}
 }
 
@@ -51,7 +65,7 @@ foreach($files as $file) {
 		continue;
       } else {
 	if ((preg_match('/[.]cb[rz]$/i',$file))||(preg_match('/[.]zip$/i',$file))||(preg_match('/[.]rar$/i',$file))) {
-              echo "<a href='splitscreen.php?filename=".rawurlencode($path)."/".rawurlencode($file)."' class='cbr'>$file</a><br />\n";
+              echo "<a href='book.php?filename=".rawurlencode($path)."/".rawurlencode($file)."' class='cbr'>$file</a><br />\n";
 	} elseif ((preg_match('/txt$/i',$file))||(preg_match('/htm(l?)$/i',$file))) {
 	      echo "<a href='view_page.php?page=".rawurlencode($path)."/".rawurlencode($file)."' class='file'>$file</a><br />\n";
 	} else {
