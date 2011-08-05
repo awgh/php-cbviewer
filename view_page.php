@@ -2,7 +2,11 @@
 	header("pragma: no-store,no-cache");
 	header("cache-control: no-cache, no-store,must-revalidate, max-age=-1");
 	header("expires: Sat, 26 Jul 1997 05:00:00 GMT");
+//error_reporting(E_ALL);
+//ini_set('display_errors', '1');
+
 	include_once('password.php');
+date_default_timezone_set('America/Chicago'); 
 /**
  * Resizes an image if width of image is bigger than the maximum width
  * @return array the imageinfo of the resized image

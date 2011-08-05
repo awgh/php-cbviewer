@@ -1,4 +1,7 @@
 <?php
+//error_reporting(E_ALL);
+//ini_set('display_errors', '1');
+
 	include_once('password.php');
 ?>
 <html><head>
@@ -38,14 +41,20 @@ if ($_GET['filename'] <> '') {
 	die("Error: no book selected!");
 }
 
+function cmp_rar_obj($a, $b) {
+	$a1 = $a->getName();
+	$b1 = $b->getName();
+	return strcmp($a1,$b1);
+}
+
 if ((preg_match('/cbr$/i',$filename)) || (preg_match('/rar$/i',$filename))) {
 	print "<select name='page' id='pageinfo' onChange='get_page();'>";
 	$rar_file = rar_open($filepath.$filename) or die ("Failed to open Rar archive");
 	$list = rar_list($rar_file);
-	sort($list);
+	usort($list, "cmp_rar_obj");
 	foreach ($list as $file) {
-		if (($file->unpacked_size > 0) && preg_match('/jpg|gif|png/i',$file->name)) {
-			print "<option class='pagename' value='".rawurlencode($file->name) ."'>".basename($file->name)."</option>";
+		if (($file->getUnpackedSize() > 0) && preg_match('/jp(e?)g|gif|png/i',$file->getName())) {
+			print "<option class='pagename' value='".rawurlencode($file->getName()) ."'>".basename($file->getName())."</option>";
 		};
 	}
 } elseif ((preg_match('/cbz$/i',$filename))||(preg_match('/zip$/i',$filename))) {
@@ -60,7 +69,7 @@ if ((preg_match('/cbr$/i',$filename)) || (preg_match('/rar$/i',$filename))) {
 	ksort($filelist);
 	
 	foreach ($filelist as $entry => $i) {
-		if (preg_match('/(jpg|png|gif)$/i',$entry)) {
+		if (preg_match('/(jp(e?)g|png|gif)$/i',$entry)) {
 		print "<option class='pagename' value='". $i."'>".basename($entry)."</option>";
 		}
 	}
@@ -68,12 +77,16 @@ if ((preg_match('/cbr$/i',$filename)) || (preg_match('/rar$/i',$filename))) {
 }
 	print '</select>';
 	print '<input type="hidden" id="comic" name="comic" value="'.rawurlencode($filename).'"/>';
-	print '<input type="hidden" id="windowsize" name="windowsize" value="1024" />'
+	print '<input type="hidden" id="windowsize" name="windowsize" value="1024" />';
 ?>
 </div>
 <div id='clearfooter'></div>
 <div id='footer'>
-<a href="index.php?path=<?echo rawurlencode(preg_replace("#/[^/]*$#",'',$filename)) ?>" target="_top">Return to Index</a>
+<?php
+print '<a href="index.php?path=';
+echo rawurlencode(preg_replace("#/[^/]*$#",'',$filename));
+print '" target="_top">Return to Index</a>';
+?>
 </div>
 </body>
 </html>
