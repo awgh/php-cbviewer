@@ -1,0 +1,14 @@
+body {
+	background-color:white;
+	color:black;
+}
+a {
+	color:black;
+	text-decoration:underline;
+}
+a:hover{
+	text-decoration:none;
+}
+a.cbr:visited,a.cbz:visited{
+	text-decoration: line-through;
+}

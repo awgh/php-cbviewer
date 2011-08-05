@@ -1,0 +1,50 @@
+.book {
+	white-space:nowrap;
+	font-family: Helvetica,Arial,sans-serif;
+	font-size: x-small;
+}
+
+#footer {
+	height: 4em;
+	padding-top: 1em;
+	margin: -5em auto 0 auto;
+}
+
+#clearfooter {
+	height: 5em;
+}
+#prev_page {
+	float:left;
+	padding-left:20px;
+	padding-top:2em;
+}
+#next_page {
+	float:right;
+	padding-right:20px;
+	padding-top:2em;
+}
+#comic_options{
+	padding-top:2em;
+	margin-left:auto;
+	margin-right:auto;
+	width:200px;
+}
+#comicbookpage{
+	margin-left:auto;
+	margin-right:auto;
+	text-align:center;
+}
+.myimage
+{
+	margin-left:auto;
+	margin-right:auto;
+}
+div#loading
+{
+	text-align:center;
+	position:absolute;
+	top:40px;
+	width:100%;
+	display:none;
+	background-color:transparent;
+}
