@@ -1,0 +1,10 @@
+Icon sources:
+
+object-rotate-right.png
+Webdesigner Depot
+http://www.webdesignerdepot.com/
+
+go-next-view.png
+go-up.png
+go-previous-view.png
+by Everaldo / Yellowicon

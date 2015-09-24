@@ -1,17 +1,95 @@
 <?php
-//error_reporting(E_ALL);
-//ini_set('display_errors', '1');
+include_once('password.php');
+include_once('util.php');
 
-	include_once('password.php');
+$mimetype = minimime($path);
 ?>
-<html><head>
+<!DOCTYPE html PUBLIC"-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="-1">
 <link rel="stylesheet" type="text/css" href="css/main.css" />
 <link rel="stylesheet" type="text/css" href="css/book.css" />
 <script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.transform2d.js"></script>
+<script type="text/javascript">
+    var pageIndex = 0;
+    var pageTable = [];
+<?php
+    // Unzip the file and load the pages
+    $pageCount = 0;
+
+    if ($mimetype == 'application/x-rar-compressed') {
+        $rar_file = rar_open($path) or die ("Failed to open Rar archive");
+        $list = rar_list($rar_file);
+        usort($list, "cmp_rar_obj");
+        foreach ($list as $file) {
+            if (($file->getUnpackedSize() > 0) && preg_match('/jp(e?)g|gif|png/i',$file->getName())) {
+                $lhs = rawurlencode($file->getName());
+                $rhs = basename($file->getName());
+                print "pageTable.push([\"".$lhs."\",\"".$rhs. "\"]);";
+                $pageCount++;
+            };
+        }
+
+    } elseif ($mimetype == 'application/zip') {
+        $zip = new ZipArchive();
+        $zip->open($path) or die("cannot open $relpath!\n");
+        $filelist = array();
+
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $entry = $zip->statIndex($i);
+            $filelist[$entry['name']] = $i;
+        }
+        ksort($filelist);
+
+        foreach ($filelist as $entry => $i) {
+            if (preg_match('/(jp(e?)g|png|gif)$/i',$entry)) {
+                $lhs = ""+$i;
+                $rhs = basename($entry);
+                print "pageTable.push([\"".$lhs."\",\"".$rhs. "\"]);";
+                $pageCount++;
+            }
+        }
+        $zip->close();
+    }
+
+    // Populate the next comic link
+    $dir_handle = @opendir(dirname($path)) or die("Unable to open ".dirname($relpath));
+    $files = array();
+
+    while ($file = readdir($dir_handle))
+    {
+	    if($file == '.' || $file == '.DS_Store') continue;
+	    array_push($files,$file);
+    }
+    closedir($dir_handle);
+    natcasesort($files);
+
+    $next = "index.php?path=".rawurlencode(preg_replace("#/[^/]*$#",'',$relpath));
+    $foundMe = false;
+    for ($i = 0; $i < sizeof($files); $i++) {
+        $file = array_values($files)[$i];
+
+        if($foundMe) {
+            $next = "book.php?path=".rawurlencode(dirname($relpath).DIRECTORY_SEPARATOR.$file);
+            break;
+        }
+
+        if (strcmp(basename($file), $basepath) == 0)
+        {
+            $foundMe = true;
+        }
+    }
+?>
+    var relative_path = "<?php echo rawurlencode($relpath);?>";
+</script>
 <script type="text/javascript" src="js/book.js"></script>
+
 <?php if($options['fullwidth'])
 {?>
 <style = "text/css">
@@ -20,73 +98,33 @@
 	}
 </style>
 <?php }?>
-<title><?php
-echo basename(stripslashes($_GET['filename']));	
-?></title>
+<title><?php echo $basepath; ?></title>
 </head><body>
 <div id="loading">
 	<img src="img/ajax-loader.gif" />
 </div>
-<div id="comicbookpage">
-	
-</div>
-<div id="prev_page"><a href="javascript:prev_page();">&lt; &lt;Prev Page</a></div>
-<div id="next_page"><a href="javascript:next_page();">Next Page &gt; &gt;</a></div>
-<div id="comic_options">
-<?php
-if ($_GET['filename'] <> '') { 
-	$filename = stripslashes($_GET['filename']);
-	$filepath = '';
-} else {
-	die("Error: no book selected!");
-}
 
-function cmp_rar_obj($a, $b) {
-	$a1 = $a->getName();
-	$b1 = $b->getName();
-	return strcmp($a1,$b1);
-}
+<div class="floater">
+<div id="return_to_index" onclick="window.location='index.php?path=<?php
+echo rawurlencode(preg_replace("#/[^/]*$#",'',$relpath));
+?>';"></div>
 
-if ((preg_match('/cbr$/i',$filename)) || (preg_match('/rar$/i',$filename))) {
-	print "<select name='page' id='pageinfo' onChange='get_page();'>";
-	$rar_file = rar_open($filepath.$filename) or die ("Failed to open Rar archive");
-	$list = rar_list($rar_file);
-	usort($list, "cmp_rar_obj");
-	foreach ($list as $file) {
-		if (($file->getUnpackedSize() > 0) && preg_match('/jp(e?)g|gif|png/i',$file->getName())) {
-			print "<option class='pagename' value='".rawurlencode($file->getName()) ."'>".basename($file->getName())."</option>";
-		};
-	}
-} elseif ((preg_match('/cbz$/i',$filename))||(preg_match('/zip$/i',$filename))) {
-	print "<select name='index' id='pageinfo' onChange='get_page();'/>";
-	$zip = new ZipArchive();
-	$zip->open($filename) or die("cannot open $filename!\n");
-	$filelist = array();
-	for ($i = 0; $i < $zip->numFiles; $i++) {
-		$entry = $zip->statIndex($i);
-		$filelist[$entry[name]] = $i;
-	}
-	ksort($filelist);
-	
-	foreach ($filelist as $entry => $i) {
-		if (preg_match('/(jp(e?)g|png|gif)$/i',$entry)) {
-		print "<option class='pagename' value='". $i."'>".basename($entry)."</option>";
-		}
-	}
-	$zip->close();
-}
-	print '</select>';
-	print '<input type="hidden" id="comic" name="comic" value="'.rawurlencode($filename).'"/>';
-	print '<input type="hidden" id="windowsize" name="windowsize" value="1024" />';
-?>
+<div id="comic_options" class="gradient">
+    <input id="pageInput" class="gradient" type="number" min="1" max="<?php echo $pageCount; ?>" step="1" />
+    of <?php echo $pageCount; ?>
 </div>
+<div id="rotate_page" onclick="rotate_page();"></div>
+<div id="next_comic" onclick="window.location='<?php echo $next; ?>'"></div>
+<div id="prev_page" onclick="prev_page();"></div>
+<div id="next_page" onclick="next_page();"></div>
+
+<input type="hidden" id="windowsize" name="windowsize" value="1024" />
+
+</div>
+
+<div id="comicbookpage"></div>
+
 <div id='clearfooter'></div>
-<div id='footer'>
-<?php
-print '<a href="index.php?path=';
-echo rawurlencode(preg_replace("#/[^/]*$#",'',$filename));
-print '" target="_top">Return to Index</a>';
-?>
-</div>
+<div id='footer'></div>
 </body>
 </html>

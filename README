@@ -1,3 +1,21 @@
+
+php-cbviewer fork (awgh@awgh.org)
+version 0.2
+
+Updates -
+- added a rotate button to the viewer
+- (in progress) made viewer menu floating
+- only relative filesystem paths are shown to the user
+- updated to latest JQuery
+- now generating valid JSON (related to new JQuery)
+- support for PDF viewing
+- removed unused code
+- added some input validation
+- new icons
+- (planned) whitelist IP ranges
+- magic number checking on archives
+
+
 php-cbviewer
 version 0.1
 
@@ -7,7 +25,6 @@ PHP-CBViewer is a web-based viewer for .cbr and .cbz "comic book archives".  It 
 Requirements: 
 PHP/RAR library (http://us.php.net/manual/en/rar.installation.php)
 PHP/Zip library (http://us3.php.net/manual/en/zip.installation.php)
-Note that you may need to install a pcre library in order to compile the zip library. Ubuntu and similar: libpcre3-dev, OS X Lion via Brew: pcre
 
 Setup:
 Edit config.php after making the following configurations:

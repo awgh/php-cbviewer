@@ -1,40 +1,37 @@
 * {
 	white-space:nowrap;
 	font-family: Helvetica,"Bitstream Vera Sans",Arial,sans-serif;
-	font-size: small;
+	font-size: large;
 	text-decoration: none;
+}
+
+a {
+    padding-left:34px;
+    line-height:28px;
 }
 
 a[href$='.cbr'],a[href$='.CBR'],a[href$='.rar'],a[href$='.RAR'] {
 	color:green;
-	background:transparent url(cbr.png) center left no-repeat;
+	background:transparent url(../img/cbr.png) center left no-repeat;
 	display:inline-block;
-	padding-left:30px;
-	line-height:24px;
 }
 
 a[href$='.cbz'],a[href$='.CBZ'] {
 	color: orange;
-	background:transparent url(cbz.png) center left no-repeat;
+	background:transparent url(../img/cbz.png) center left no-repeat;
 	display:inline-block;
-	padding-left:30px;
-	line-height:24px;
 }
 
 a.dir {
 	color: blue;
-	background:transparent url(folder.png) center left no-repeat;
+	background:transparent url(../img/folder.png) center left no-repeat;
 	display:inline-block;
-	padding-left:30px;
-	line-height:24px;
 }
 
 a.prev {
 	color: blue;
-	background:transparent url(up.png) center left no-repeat;
+	background:transparent url(../img/up.png) bottom left no-repeat;
 	display:inline-block;
-	padding-left:30px;
-	line-height:24px;
 }
 
 p {
@@ -42,6 +39,6 @@ p {
 }
 
 h2 {
-	font-size: large;
+	font-size: x-large;
 	margin-bottom:0;
 }
