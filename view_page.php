@@ -31,40 +31,36 @@ function resize($filename, $maxwidth="1024")
 	return getimagesize($filename);
 }
 
-function SureRemoveDir($dir, $DeleteMe) {
+function CleanCacheDir($dir, $secondsOld) {
 	if(!$dh = @opendir($dir)) return;
 	while (false !== ($obj = readdir($dh))) {
 		if($obj=='.' || $obj=='..') continue;
-		if(!@unlink($dir.DIRECTORY_SEPARATOR.$obj))
-            SureRemoveDir($dir.DIRECTORY_SEPARATOR.$obj, true);
+                $file = $dir.DIRECTORY_SEPARATOR.$obj;
+                if ((time()-filectime($file)) > $secondsOld) {  
+		    @unlink($file);
+                }
 	}
-
 	closedir($dh);
-	if($DeleteMe) {
-		@rmdir($dir);
-	}
 }
 
-SureRemoveDir($options['cachepath'],false);
-
-$faketmp = date('U');
+CleanCacheDir($options['cachepath'],300);
 
 $mimetype = minimime($path);
 
 if ($mimetype == 'application/x-rar-compressed') {
-	$filename = rawurldecode(stripslashes($_GET['page']));
-	$rar_file = rar_open($path);
-	$cachepathname=$options['cachepath'].DIRECTORY_SEPARATOR.$faketmp.$basepath;
-	$entry = rar_entry_get($rar_file, $filename);
-	$entry->extract(false,$cachepathname);
-	rar_close($rar_file);
+    $filename = rawurldecode(stripslashes($_GET['page']));
+    $rar_file = rar_open($path);
+    $cachepathname=tempnam($options['cachepath'], "cbr");
+    $entry = rar_entry_get($rar_file, $filename);
+    $entry->extract(false,$cachepathname);
+    rar_close($rar_file);
 
     $size = resize($cachepathname,intval($_GET['maxwidth']));
 
     echo '{'."\n\r";
     echo '  "width" : "'.$size[0].'",'."\n\r";
     echo '  "height" : "'.$size[1].'",'."\n\r";
-    echo '  "src" : "'.$options['webcache'].'/'.$faketmp.rawurlencode($basepath).'"'."\n\r";
+    echo '  "src" : "'.$options['webcache'].'/'.basename($cachepathname).'"'."\n\r";
     echo '}';
 
   } elseif ($mimetype == 'application/zip') {
@@ -74,22 +70,20 @@ if ($mimetype == 'application/x-rar-compressed') {
 	$zip = new ZipArchive();
 
 	if ($zip->open($path) === TRUE) {
-		$entry = $zip->statIndex($index);
-		$cachepathname = $options['cachepath'].DIRECTORY_SEPARATOR.$faketmp.basename($entry['name']);
+	    $entry = $zip->statIndex($index);
+            $cachepathname=tempnam($options['cachepath'], "cbz");
+            file_put_contents($cachepathname, $zip->getFromIndex($index));
+	    $zip->close();
+            $size = resize($cachepathname,  intval($_GET['maxwidth']));
 
-        file_put_contents($cachepathname, $zip->getFromIndex($index));
-		$zip->close();
-        $size = resize($cachepathname,  intval($_GET['maxwidth']));
-
-        echo '{'."\n\r";
-        echo '  "width" : "'.$size[0].'",'."\n\r";
-        echo '  "height" : "'.$size[1].'",'."\n\r";
-        echo '  "src" : "'.$options['webcache'].'/'.$faketmp.rawurlencode(basename($entry['name'])).'"'."\n\r";
-        echo '}';
+            echo '{'."\n\r";
+            echo '  "width" : "'.$size[0].'",'."\n\r";
+            echo '  "height" : "'.$size[1].'",'."\n\r";
+            echo '  "src" : "'.$options['webcache'].'/'.basename($cachepathname).'"'."\n\r";
+            echo '}';
 	} else {
-		echo 'failed to extract page from zip.';
+	    echo 'failed to extract page from zip.';
 	}
-	
 } elseif (preg_match('/txt$/i',$basepath)){
 	echo "<PRE>";
 	readfile($path);
