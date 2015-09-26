@@ -25,6 +25,7 @@ PHP-CBViewer is a web-based viewer for .cbr and .cbz "comic book archives".  It 
 Requirements: 
 PHP/RAR library (http://us.php.net/manual/en/rar.installation.php)
 PHP/Zip library (http://us3.php.net/manual/en/zip.installation.php)
+PHP/GD library (http://php.net/manual/en/book.image.php)
 
 Setup:
 Edit config.php after making the following configurations:
