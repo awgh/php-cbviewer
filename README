@@ -14,7 +14,7 @@ Updates -
 - new icons
 - (planned) whitelist IP ranges
 - magic number checking on archives
-
+- caching scheme is now (hopefully) much less risky for multi-user scenarios
 
 php-cbviewer
 version 0.1
