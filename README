@@ -1,26 +1,19 @@
 
+
 php-cbviewer fork (awgh@awgh.org)
 version 0.2
+- based on php-cbviewer 0.1, Copyright (C) 2008 Paul Leonard
 
-Updates -
-- added a rotate button to the viewer
-- (in progress) made viewer menu floating
-- only relative filesystem paths are shown to the user
-- updated to latest JQuery
-- now generating valid JSON (related to new JQuery)
-- support for PDF viewing
-- removed unused code
-- added some input validation
-- new icons
-- (planned) whitelist IP ranges
-- magic number checking on archives
-- caching scheme is now (hopefully) much less risky for multi-user scenarios
+PHP-CBViewer is a web-based viewer for .cbr and .cbz "comic book archives".
 
-php-cbviewer
-version 0.1
-
-PHP-CBViewer is a web-based viewer for .cbr and .cbz "comic book archives".  It utilizes the ZIP and RAR extensions to PHP, and maintains minimal filesystem usage by flushing its cache directory on each new pageload.  At present it is only suitable for single-user installations, due to this cache-control mechanism.
-
+Features:
+- Lightweight, no cruft.
+- Uses just the filesystem, no database required.
+- Supports extensions: cbr, cbz, rar, zip, pdf, and txt.
+- "Next Comic" button skips to next comic for binge reading.
+- Page rotation for tablets (still buggy on some browsers)
+- Touchscreen/Scrollwheel friendly
+- Site-level password option with IP Subnet Whitelisting
 
 Requirements: 
 PHP/RAR library (http://us.php.net/manual/en/rar.installation.php)
@@ -28,14 +21,21 @@ PHP/Zip library (http://us3.php.net/manual/en/zip.installation.php)
 PHP/GD library (http://php.net/manual/en/book.image.php)
 
 Setup:
-Edit config.php after making the following configurations:
 
-1) Create a cache directory, which is web-accessible, to contain the current page.  This cache directory must have the same parent directory as config.php.  Give the cache directory sufficient permissions that the web server process can write to it (777, or chown()ed to the process owner of apache).  Note that at present, when any page is loaded, everything else in this directory is deleted.  Enter the basename of this directory (e.g., "cache") for $webcache in config.php.
+1) Create a cache directory, which is web-accessible, in the same directory as config.php.  
+On Ubuntu:
+sudo mkdir /var/www/html/comics/cache
 
-2) Create a directory, which does not need to be web-accessible but does need to have sufficient permissions that the web server process can READ it (at least 555).  Put all of your .cbr/.cbz files in this directory.  Complex filesystem structures are OK; php-cbviewer will descend the filesystem tree.  Enter the full path to this directory for $base in config.php.
+2) Give the cache directory sufficient permissions that the web server process can write to it (777, or chown()ed to the process owner of apache).  
+On Ubuntu: 
+sudo chown www-data:www-data /var/www/html/comics/cache
+
+3) Enter the basename of this directory (e.g., "cache") for $webcache in config.php.
+
+4) Enter the full path to your comics directory for $base in config.php.  This directory does
+not need to be web-accessible, but must be readable by the web server process.
 
 
-Copyright (C) 2008 Paul Leonard
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of Version 2 of the GNU General Public License as 
