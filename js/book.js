@@ -39,27 +39,24 @@ function next_page()
     console.log("next pageIndex: "+pageIndex);
 }
 
-var angle = 0;
 var imgwidth = 0;
 var imgheight = 0;
+
+var step = 0;
+
 function rotate_page()
 {
-    angle = (angle+90)%360;
-
-switch(angle){
-    case 90:
-        $('#comicbookpage img').animate({"transform": "rotate(90deg)"}, 0);
-        break;
-    case 180:
-        $('#comicbookpage img').animate({"transform": "rotate(180deg)"}, 0);
-        break;
-    case 270:
-        $('#comicbookpage img').animate({"transform": "rotate(270deg) translateX(-"+(imgheight*0.5)+")"}, 0);
-        break;
-    default:
-        $('#comicbookpage img').animate({"transform": "rotate(0deg)"}, 0);
+    step += 1;
+    update_angle();
 }
 
+function update_angle() 
+{
+    var img = $("#comicbookpage img");
+    img.css('transform', 'rotate('+ step*90 +'deg)');
+    var d = img.width() - img.height();
+    img.css('margin-left', -d/2*(step%2));
+    img.css('margin-top',   d/2*(step%2));
 }
 
 function get_page()
@@ -91,6 +88,7 @@ function get_page()
                         + imgwidth + "' height='"
                         + imgheight + "' src='"
                         + parsedResponse['src'] + "' class='myimage'/></a>");
+		update_angle();
             });
         $('#comicbookpage').fadeIn('fast');
         $('#loading').hide();
